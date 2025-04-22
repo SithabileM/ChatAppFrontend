@@ -1,24 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import Home from './Home';
+import Login from './login';
+import Signup from './Signup';
+import Chats from './Chats';
+import Room from './Room';
+import Users from './Users';
+import { createBrowserRouter, RouterProvider, Routes, Route } from 'react-router-dom';
+
+const router= createBrowserRouter([
+  {path: '/', element: <Home/>},
+  {path: '/Login', element: <Login/>},
+  {path: '/Signup', element: <Signup/>},
+  {path: '/Chats', element: <Chats/>},
+  {path: '/Users', element: <Users/>},
+  {path: '/Users/:id',element:<Room/>},
+  
+]);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RouterProvider router={router}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Signup" element={<Signup />} />
+        <Route path="/Chats" element={<Chats/>}/>
+        <Route path="/Users" element={<Users/>}/>
+        <Route path="/Users/:id" element={<Room/>}/>
+      </Routes>
+    </RouterProvider>
   );
 }
 
