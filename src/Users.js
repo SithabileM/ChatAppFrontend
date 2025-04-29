@@ -1,6 +1,6 @@
 import {useState,useEffect} from 'react'
 import { Link } from 'react-router-dom'
-import App from './App'
+
 const Users= ()=>{
     const [AppUsers,setAppUsers]=useState('')
     useEffect(()=>{fetch("http://localhost:8000/users",{

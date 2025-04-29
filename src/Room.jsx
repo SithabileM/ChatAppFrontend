@@ -1,5 +1,5 @@
 import {useLocation} from 'react-router-dom';
-import {useState,useEffect} from 'react'
+import {useState} from 'react'
 import useLoadChats from './useLoadChats';
 
 
@@ -12,7 +12,6 @@ const Room=()=>{
 
     
 const handlePostMessage=(roomId)=>{
-    console.log(roomId)
     const data={room:roomId,sender:userId,recipient:locationId,message:message}
     fetch('http://127.0.0.1:8000/post_message',{
         method: 'POST',
@@ -51,21 +50,24 @@ const handleGetOrCreateRoom = (e) => {
 
 const {chats,error,loading} = useLoadChats(roomId? `http://127.0.0.1:8000/get_messages/${roomId}` : null);
 
+
 return(
         <div>
             <h2>Chats</h2>
             {loading&& <p>Loading...</p>}
-            {error&& <p>Error loading chats</p>}
-        {chats&&chats.map((chat,index)=>(
-            <div key={index}>
-                {chat.message}
-            </div>
-        ))}
+            {error&& <p>{error.message}</p>}
 
             <form>
                 <input type='text' placeholder='Message' value={message} onChange={(e)=>setMessage(e.target.value)}></input>
                 <input type='submit' onClick={handleGetOrCreateRoom}></input>
             </form>
+
+            {chats&&chats.map((chat,index)=>(
+            <div key={index}>
+              <p> {chat.message} </p>  
+            </div>
+        ))}
+
         </div>
     )
 }

@@ -9,14 +9,16 @@ useEffect(()=>{
     if (!url) return;
     let intervalId;
     const fetchChats= ()=>{
+        console.log(url)
         fetch(url,{
             method: 'GET',
             headers: {'Content-Type':'application/json'},
-        }).then((res)=>{return res.json()})
+        }).then((res)=> res.json())
         .then((data)=>{
             setLoading(false);
-            console.log(data);
-            setChats(data);
+            const chatArray = Object.values(data);
+            setChats(chatArray);
+            
         })
         .catch((error)=>{
             setLoading(false);
