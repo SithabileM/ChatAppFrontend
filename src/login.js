@@ -33,6 +33,7 @@ const Login=()=>{
         .then( (response) => response.json())
         .then((data)=>{
             localStorage.setItem("userId",data.user.id);
+            localStorage.setItem('token',data.token);
             navigate('/Chats');
         })
         .catch((error)=> {

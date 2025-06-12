@@ -1,18 +1,25 @@
 import {useLocation} from 'react-router-dom';
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 import useLoadChats from './useLoadChats';
-
 
 const Room=()=>{
     const location=useLocation();
-    const locationId=location.state.id;
+    const recipientId=location.state.id;
     const userId=localStorage.getItem("userId");
     const [message, setMessage]=useState(null);
     const [roomId,setRoomId]=useState(null);
+    const [a, b] = [userId, recipientId].sort();
+
+    useEffect(()=>{
+        setRoomId(`ChatRoom(${a}_${b})`)
+    },[a,b])
+    console.log(roomId)
+
+    const {chats,error,loading} = useLoadChats(`http://127.0.0.1:8000/get_messages/${roomId}`);
 
     
 const handlePostMessage=(roomId)=>{
-    const data={room:roomId,sender:userId,recipient:locationId,message:message}
+    const data={room:roomId,sender:userId,recipient:recipientId,message:message}
     fetch('http://127.0.0.1:8000/post_message',{
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -23,13 +30,13 @@ const handlePostMessage=(roomId)=>{
 
 const handleGetOrCreateRoom = (e) => {
     e.preventDefault();
-    fetch(`http://127.0.0.1:8000/room/${userId}/${locationId}`, {
+    fetch(`http://127.0.0.1:8000/room/${a}/${b}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     })
     .then((response) => {
         if (response.status === 404) {
-            const data={user_1:userId,user_2:locationId}
+            const data={id:a+"_"+b,user_1:a,user_2:b}
             return fetch('http://127.0.0.1:8000/create_chatRoom', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -48,9 +55,6 @@ const handleGetOrCreateRoom = (e) => {
     .catch((error) => { console.error(error); });
 };
 
-const {chats,error,loading} = useLoadChats(roomId? `http://127.0.0.1:8000/get_messages/${roomId}` : null);
-
-
 return(
         <div>
             <h2>Chats</h2>
@@ -64,7 +68,8 @@ return(
 
             {chats&&chats.map((chat,index)=>(
             <div key={index}>
-              <p> {chat.message} </p>  
+                {`${chat.sender}`===userId&&<p style={{textAlign:'right'}}> {chat.message} </p> }
+                {`${chat.recipient}`===userId&&<p style={{textAlign:'left'}}> {chat.message} </p>}  
             </div>
         ))}
 
