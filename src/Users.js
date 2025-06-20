@@ -2,12 +2,14 @@ import {useState,useEffect} from 'react'
 import { Link } from 'react-router-dom'
 
 const Users= ()=>{
-    const [AppUsers,setAppUsers]=useState('');
+    const [AppUsers,setAppUsers]=useState([]);
     const [allUsersShown,setAllUsersShown]=useState(true)
     const [buttonCaption,setButtonCaption] = useState("Show all users")
+    const [searchTerm, setSearchTerm] = useState("")
 
-    const handleGetUsers=()=>{
-        if(allUsersShown===false){
+
+    const handleGetUsers=(term)=>{
+        if(allUsersShown===false || searchTerm !== ""){
             fetch("http://localhost:8000/users",{
         method: "GET",
         headers: {
@@ -18,7 +20,10 @@ const Users= ()=>{
         res => res.json() 
     )
     .then(
-        data => {setAppUsers(data);}
+        data => {
+            const users=data.filter((d)=>{return d.username.toUpperCase().includes(term.toUpperCase())});
+            setAppUsers(users);
+        }
     )
         setButtonCaption("Show my connections");
         setAllUsersShown(true);
@@ -32,10 +37,14 @@ const Users= ()=>{
                 'Authorization': `Token ${token}`
             }
         }).then((res)=>{return res.json()})
-        .then((data)=>{setAppUsers(data['connectedUsers']);})
+        .then((data)=>{
+            const users=data['connectedUsers'].filter((user)=>{return user.username.includes(term)})
+            setAppUsers(users);
+        })
         .catch((err)=>{console.error(err)})
         setButtonCaption("Show all users")
         setAllUsersShown(false)
+        console.log(AppUsers);
     }
         
         
@@ -48,19 +57,20 @@ const Users= ()=>{
     }
 
     useEffect(()=>{
-        handleGetUsers()
-    },[])
+            handleGetUsers(searchTerm);
+    },[searchTerm])
     
     return(
 <div>
     <h1>Users</h1>
-    <button onClick={()=>{handleGetUsers()}}>{buttonCaption}</button>
+    <input type='text' placeholder='search user' value={searchTerm} onChange={(e)=>{setSearchTerm(e.target.value)}} ></input>
+    <button onClick={()=>{handleGetUsers(searchTerm)}}>{buttonCaption}</button>
     {AppUsers&&AppUsers.map((AppUser)=>(
         <div key={AppUser.id}>
             <div>
                 <h3> {handleGetInitials(AppUser.username)} </h3>
             </div>
-            <Link to={"/Users/"+ AppUser.id} state={{id: AppUser.id}}>{AppUser.username}</Link>
+            <Link to={"/Users/"+ AppUser.id} state={{id: AppUser.id,recipient: AppUser.username,initial: handleGetInitials(AppUser.username)}}>{AppUser.username}</Link>
         </div>
     ))}
 </div>

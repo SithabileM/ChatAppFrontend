@@ -5,6 +5,8 @@ import useLoadChats from './useLoadChats';
 const Room=()=>{
     const location=useLocation();
     const recipientId=location.state.id;
+    const recipient=location.state.recipient;
+    const initial = location.state.initial
     const userId=localStorage.getItem("userId");
     const [message, setMessage]=useState(null);
     const [roomId,setRoomId]=useState(null);
@@ -57,10 +59,10 @@ const handleGetOrCreateRoom = (e) => {
 
 return(
         <div>
-            <h2>Chats</h2>
             {loading&& <p>Loading...</p>}
             {error&& <p>{error.message}</p>}
-
+            <h2>{recipient}</h2>
+            <p>{initial}</p>
             <form>
                 <input type='text' placeholder='Message' value={message} onChange={(e)=>setMessage(e.target.value)}></input>
                 <input type='submit' onClick={handleGetOrCreateRoom}></input>
