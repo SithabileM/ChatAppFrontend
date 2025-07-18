@@ -1,0 +1,88 @@
+.users{
+        background: radial-gradient(ellipse 100% 100%, rgb(26,29,35,0.8) 0%, rgb(26, 29, 35) 50%);
+        color: white;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        min-height: 100%;
+
+        
+}
+.profile{
+        object-fit:cover;
+        height:50px;
+        width: 50px;
+        border-radius: 50%; 
+          
+}
+
+.profile_container{
+        max-height: 2%;
+        display: flex;
+        margin-left: 2rem;
+        margin-top:1rem;
+        
+}
+
+.username{
+        padding-top: 1rem;
+        text-decoration:solid;
+        color:white;
+        width:100%;
+        padding-left: 2%;
+}
+
+.heading{
+        text-align: left;
+        font-size: 2rem;
+        margin-left: 1rem;
+}
+
+.search_user_input{
+        border-radius:4rem;
+        width:50%;
+        height:2rem;
+        padding-left: 1rem;
+        margin-left: 1.5rem;
+        margin-bottom: 2rem;
+        
+}
+
+.filter_users{
+        border-radius: 3rem;
+        width:6rem;
+        height: 3.5rem;
+        margin-left: 1.5rem;
+        background-color: black;
+        color:white;
+        margin-bottom: 1rem;
+
+       
+}
+
+.update_profile_link{
+        text-decoration: none;
+        color:rgb(0, 158, 220);
+        margin-left: 45%;
+        display: block;
+}
+
+@media(min-width: 700px){
+        .search_user_input{
+        width:60%;
+        
+}
+
+.update_profile_link{
+        margin-left: 55%;
+}
+}
+
+.accounts_buttons{
+        display: flex;
+        flex-direction: row;
+        position: fixed;
+        top: 0;
+        right:0;
+}

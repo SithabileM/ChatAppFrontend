@@ -6,6 +6,7 @@ import Signup from './Signup';
 import Chats from './Chats';
 import Room from './Room';
 import Users from './Users';
+import ProfileUpdate from './ProfileUpdate';
 import { createBrowserRouter, RouterProvider, Routes, Route } from 'react-router-dom';
 
 const router= createBrowserRouter([
@@ -15,10 +16,11 @@ const router= createBrowserRouter([
   {path: '/Chats', element: <Chats/>},
   {path: '/Users', element: <Users/>},
   {path: '/Users/:id',element:<Room/>},
-  
+  {path: '/ProfileUpdate',element:<ProfileUpdate/>},
 ]);
 
 function App() {
+
   return (
     <RouterProvider router={router}>
       <Routes>
@@ -28,9 +30,11 @@ function App() {
         <Route path="/Chats" element={<Chats/>}/>
         <Route path="/Users" element={<Users/>}/>
         <Route path="/Users/:id" element={<Room/>}/>
+        <Route path="/ProfileUpdate" element={<ProfileUpdate/>}/>
       </Routes>
     </RouterProvider>
-  );
+  )
+  
 }
 
 export default App;

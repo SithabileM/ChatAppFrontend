@@ -1,12 +1,18 @@
 import {useState,useEffect} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import styles from './Users.module.css'
+import Logout from './logout'
+import Deactivate from './Deactivate'
 
 const Users= ()=>{
     const [AppUsers,setAppUsers]=useState([]);
-    const [allUsersShown,setAllUsersShown]=useState(true)
-    const [buttonCaption,setButtonCaption] = useState("Show all users")
-    const [searchTerm, setSearchTerm] = useState("")
-
+    const [allUsersShown,setAllUsersShown]=useState(true);
+    const [buttonCaption,setButtonCaption] = useState("Show all users");
+    const [searchTerm, setSearchTerm] = useState('');
+    const [imageUrls,setImageUrls]=useState([]);
+    const token =localStorage.getItem('token');
+    const navigate=useNavigate();
+    
 
     const handleGetUsers=(term)=>{
         if(allUsersShown===false || searchTerm !== ""){
@@ -30,49 +36,100 @@ const Users= ()=>{
         }
     else{
         const token = localStorage.getItem("token")
+        if(!token){
+            navigate('/login')
+        }
         fetch("http://localhost:8000/get_connections",{
             method: "GET",
             headers: {
                 'Content-Type': "application/json",
                 'Authorization': `Token ${token}`
             }
-        }).then((res)=>{return res.json()})
+        }).then((res)=>{
+            if(!res.ok){
+                throw new Error(res.statusText);
+            }
+            return res.json()}
+        )
         .then((data)=>{
             const users=data['connectedUsers'].filter((user)=>{return user.username.includes(term)})
             setAppUsers(users);
         })
-        .catch((err)=>{console.error(err)})
+        .catch((err)=>setAppUsers([]))
         setButtonCaption("Show all users")
         setAllUsersShown(false)
-        console.log(AppUsers);
-    }
-        
-        
     }
 
-    const handleGetInitials=(username)=>{
-        const words = username.split(' ');
-        const initials = words.map(word => word[0].toUpperCase()).join('');
-        return initials;
-    }
+};
 
     useEffect(()=>{
             handleGetUsers(searchTerm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[searchTerm])
+
+    useEffect(()=>{
+         const fetchImages=async()=>{
+            const promises= AppUsers.map((AppUser)=>{
+                return fetch(`http://localhost:8000/getProfilePicture/${AppUser.id}`,{
+            method: 'GET',
+            headers: {'Content-Type':'multipart/form-data'}
+        }).then(res => res.json())
+            });
+            const results= await Promise.all(promises);
+        
+            setImageUrls(results);
+            
+            
+        }
+        fetchImages();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[AppUsers])
+
+    const handleLogout=()=>{
+        fetch('http://localhost:8000/logout',{
+            method:'POST',
+            headers:{'Authorization': `Token ${token}`}
+        }).then(response=>
+        {
+            localStorage.setItem('token','');
+            navigate('/login');
+        }
+        )
+    }
+
+    const handleDeactivate=()=>{
+        fetch('http://localhost:8000/users/delete',{
+            method: 'DELETE',
+            headers:{'Authorization':`Token ${token}`}
+        }).then((response)=>{
+            localStorage.setItem('Token','');
+            navigate('/')
+        })
+    }
+   
     
-    return(
-<div>
-    <h1>Users</h1>
-    <input type='text' placeholder='search user' value={searchTerm} onChange={(e)=>{setSearchTerm(e.target.value)}} ></input>
-    <button onClick={()=>{handleGetUsers(searchTerm)}}>{buttonCaption}</button>
-    {AppUsers&&AppUsers.map((AppUser)=>(
-        <div key={AppUser.id}>
+return(
+<div className={styles.users}>
+    <div className={styles.accounts_buttons}>
+        <Logout onLogout={handleLogout}/>
+        <Deactivate onDeactivate={handleDeactivate}/>
+    </div>
+    
+    <h1 className={styles.heading}>Let's Chat</h1>
+    <Link className={styles.update_profile_link} to='/ProfileUpdate'>Update Profile</Link><br/>
+    <button className={styles.filter_users} onClick={()=>{handleGetUsers(searchTerm)}} disabled={searchTerm.trim()!==""}>{buttonCaption}</button><br/>
+    <input className={styles.search_user_input} type='text' placeholder='search user' value={searchTerm} onChange={(e)=>{setSearchTerm(e.target.value)}} ></input>
+    {AppUsers&&AppUsers.map((AppUser,index)=>(
+        <div className={styles.profile_container} key={AppUser.id}>
             <div>
-                <h3> {handleGetInitials(AppUser.username)} </h3>
+                {imageUrls[index]&&<img className={styles.profile} src={`http://localhost:8000${imageUrls[index].profile_picture}`} alt={`${AppUser.username}'s profile`} />}
             </div>
-            <Link to={"/Users/"+ AppUser.id} state={{id: AppUser.id,recipient: AppUser.username,initial: handleGetInitials(AppUser.username)}}>{AppUser.username}</Link>
+                {imageUrls[index]&&<Link data-testid='username' className={styles.username} to={"/Users/"+ AppUser.id} state={{image:`http://localhost:8000${imageUrls[index].profile_picture}`,id: AppUser.id,recipient: AppUser.username,}}>{AppUser.username}</Link>}
         </div>
     ))}
+    {AppUsers&&AppUsers.length===0 && <p>No results found</p>}
+    
 </div>
     )
 }

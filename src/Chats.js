@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 
 const Chats=()=>{
    const navigate=useNavigate()
-   const handleGetUsers = ()=>{
+   useEffect(()=>{
       navigate('/Users')
-   }
+   },[navigate])
+   
 return(
    <div className="myChats">
-      <button onClick={handleGetUsers}>O    Users</button>
-   <form></form>
+      <p>loading...</p>
    </div>
    
 )
