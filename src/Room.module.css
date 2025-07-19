@@ -83,6 +83,34 @@
     overflow-wrap: break-word;
 }
 
+.sender_status{
+    text-align: left;
+    margin-left: 1.5rem;
+    color: grey;
+    
+}
+.sender_time{
+    text-align: left;
+    margin-left: 1.5rem;
+    color: grey;
+
+}
+
+.recipient_status{
+   text-align: right;
+   margin-right: 15%;
+    color: grey;
+
+    
+}
+.recipient_time{
+    text-align: right;
+    margin-right: 15%;
+    color: grey;
+
+    
+}
+
 @media(min-height: 810px){
     .message_input{
     width:57.5%;

@@ -81,8 +81,19 @@ return(
                 {chats&&chats.map((chat,index)=>(
             <div key={index} className={styles.message}>
                 
-                    {`${chat.sender}`===userId&&<p className={styles.sender_message}> {chat.message} </p> }
-                    {`${chat.recipient}`===userId&&<p className={styles.recipient_message}> {chat.message} </p>}  
+                    {`${chat.sender}`===userId&&<p className={styles.sender_message}> {chat.message}</p>}
+                    {`${chat.recipient}`===userId&&<p className={styles.recipient_message}> {chat.message}</p>} 
+
+
+                    {`${chat.sender}`===userId&&<p className={styles.sender_time}>{chat.updated_at.slice(0,10)}</p>}
+
+                    {`${chat.sender}`===userId&&<p className={styles.sender_time}>{chat.updated_at.slice(11,19)}</p>}
+                    
+                    {`${chat.recipient}`===userId&&<p className={styles.recipient_time}>{chat.updated_at.slice(0,10)}</p>}
+                    {`${chat.recipient}`===userId&&<p className={styles.recipient_time}>{chat.updated_at.slice(11,19)}</p>}
+                    
+                    
+                    
             </div>
         ))}
             </div>
