@@ -11,12 +11,13 @@ const Users= ()=>{
     const [searchTerm, setSearchTerm] = useState('');
     const [imageUrls,setImageUrls]=useState([]);
     const token =localStorage.getItem('token');
+    const baseUrl=process.env.REACT_APP_API_BASE_URL;
     const navigate=useNavigate();
     
 
     const handleGetUsers=(term)=>{
         if(allUsersShown===false || searchTerm !== ""){
-            fetch("http://localhost:8000/users",{
+            fetch(`${baseUrl}/users`,{
         method: "GET",
         headers: {
             "Content-Type":"application/json"
@@ -39,7 +40,7 @@ const Users= ()=>{
         if(!token){
             navigate('/login')
         }
-        fetch("http://localhost:8000/get_connections",{
+        fetch(`${baseUrl}/get_connections`,{
             method: "GET",
             headers: {
                 'Content-Type': "application/json",
@@ -70,7 +71,7 @@ const Users= ()=>{
     useEffect(()=>{
          const fetchImages=async()=>{
             const promises= AppUsers.map((AppUser)=>{
-                return fetch(`http://localhost:8000/getProfilePicture/${AppUser.id}`,{
+                return fetch(`${baseUrl}/getProfilePicture/${AppUser.id}`,{
             method: 'GET',
             headers: {'Content-Type':'multipart/form-data'}
         }).then(res => res.json())
@@ -87,7 +88,7 @@ const Users= ()=>{
     },[AppUsers])
 
     const handleLogout=()=>{
-        fetch('http://localhost:8000/logout',{
+        fetch(`${baseUrl}/logout`,{
             method:'POST',
             headers:{'Authorization': `Token ${token}`}
         }).then(response=>
@@ -99,7 +100,7 @@ const Users= ()=>{
     }
 
     const handleDeactivate=()=>{
-        fetch('http://localhost:8000/users/delete',{
+        fetch(`${baseUrl}/users/delete`,{
             method: 'DELETE',
             headers:{'Authorization':`Token ${token}`}
         }).then((response)=>{

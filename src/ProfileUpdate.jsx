@@ -6,9 +6,10 @@ const ProfileUpdate=()=>{
    const [profilePicture,setProfilePicture] = useState('');
    const token=localStorage.getItem('token');
    const [imageUrl,setImageUrl]=useState("");
+   const baseUrl=process.env.REACT_APP_API_BASE_URL
 
    useEffect(()=>{
-    fetch('http://127.0.0.1:8000/profile_picture',{
+    fetch(`${baseUrl}/profile_picture`,{
         method: 'GET',
         headers:{
             'Authorization': `Token ${token}`,
@@ -18,7 +19,7 @@ const ProfileUpdate=()=>{
     .then((response)=> response.json())
     .then((data)=>{
         setProfilePicture(data.profile_picture);
-        setImageUrl("http://localhost:8000"+data.profile_picture);
+        setImageUrl(baseUrl+data.profile_picture);
     })
     .catch((error)=>console.error(error));
    },[token,profilePicture]);
@@ -38,7 +39,7 @@ const ProfileUpdate=()=>{
 
 
         //upload file
-        fetch('http://127.0.0.1:8000/profile_picture',{
+        fetch(`${baseUrl}/profile_picture`,{
             method: 'PUT',
             headers:{
                 'Authorization': `Token ${token}`,

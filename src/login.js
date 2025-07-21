@@ -8,6 +8,7 @@ const Login=()=>{
     const [password,setPassword] =useState('');
     const [errorMessage,setErrorMessage]=useState(false);
     const navigate= useNavigate();
+    const baseUrl=process.env.REACT_APP_API_BASE_URL
 
 
     const handleSubmitUsername = (e)=>{
@@ -23,7 +24,7 @@ const Login=()=>{
     const handleLogin= (e)=>{
         e.preventDefault();
         const data={username,password};
-        fetch('http://localhost:8000/login',{
+        fetch(`${baseUrl}/login`,{
             method: "POST",
             headers: {
                 'Content-Type':'application/json'

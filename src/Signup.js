@@ -7,6 +7,7 @@ const Signup=()=>{
     const [password,setPassword] =useState('')
     const [email, setEmail] =useState('')
     const [errorMessage,setErrorMessage]=useState(false);
+    const baseUrl=process.env.REACT_APP_API_BASE_URL
 
     
     const handleSubmitUsername = (e)=>{
@@ -26,7 +27,7 @@ const Signup=()=>{
         e.preventDefault();
         
         const data={username,password,email}
-        fetch('http://localhost:8000/signup',{
+        fetch(`${baseUrl}/signup`,{
             method: "POST",
             headers: {
                 'Content-Type':'application/json'

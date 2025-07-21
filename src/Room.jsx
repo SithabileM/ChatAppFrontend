@@ -12,18 +12,19 @@ const Room=()=>{
     const [message, setMessage]=useState(null);
     const [roomId,setRoomId]=useState(null);
     const [a, b] = [userId, recipientId].sort();
+    const baseUrl=process.env.REACT_APP_API_BASE_URL;
 
     console.log(image);
     useEffect(()=>{
         setRoomId(`ChatRoom(${a}_${b})`)
     },[a,b])
 
-    const {chats,error,loading} = useLoadChats(`http://127.0.0.1:8000/get_messages/${roomId}`);
+    const {chats,error,loading} = useLoadChats(`${baseUrl}/get_messages/${roomId}`);
 
     
 const handlePostMessage=(roomId)=>{
     const data={room:roomId,sender:userId,recipient:recipientId,message:message}
-    fetch('http://127.0.0.1:8000/post_message',{
+    fetch(`${baseUrl}/post_message`,{
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
@@ -34,14 +35,14 @@ const handlePostMessage=(roomId)=>{
 
 const handleGetOrCreateRoom = (e) => {
     e.preventDefault();
-    fetch(`http://127.0.0.1:8000/room/${a}/${b}`, {
+    fetch(`${baseUrl}/room/${a}/${b}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     })
     .then((response) => {
         if (response.status === 404) {
             const data={id:a+"_"+b,user_1:a,user_2:b}
-            return fetch('http://127.0.0.1:8000/create_chatRoom', {
+            return fetch(`${baseUrl}/create_chatRoom`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
