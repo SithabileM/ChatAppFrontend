@@ -124,9 +124,9 @@ return(
     {AppUsers&&AppUsers.map((AppUser,index)=>(
         <div className={styles.profile_container} key={AppUser.id}>
             <div>
-                {imageUrls[index]&&<img className={styles.profile} src={`http://localhost:8000${imageUrls[index].profile_picture}`} alt={`${AppUser.username}'s profile`} />}
+                {imageUrls[index]&&<img className={styles.profile} src={`${baseUrl}${imageUrls[index].profile_picture}`} alt={`${AppUser.username}'s profile`} />}
             </div>
-                {imageUrls[index]&&<Link data-testid='username' className={styles.username} to={"/Users/"+ AppUser.id} state={{image:`http://localhost:8000${imageUrls[index].profile_picture}`,id: AppUser.id,recipient: AppUser.username,}}>{AppUser.username}</Link>}
+                {imageUrls[index]&&<Link data-testid='username' className={styles.username} to={"/Users/"+ AppUser.id} state={{image:`${baseUrl}${imageUrls[index].profile_picture}`,id: AppUser.id,recipient: AppUser.username,}}>{AppUser.username}</Link>}
         </div>
     ))}
     {AppUsers&&AppUsers.length===0 && <p>No results found</p>}
