@@ -60,7 +60,7 @@ const ProfileUpdate=()=>{
         .catch((error)=>console.error(error))
         console.log(selectedFile)
         const file_url=imageUrl
-        return file_url
+        return JSON.stringify(file_url)
 
     };
 
