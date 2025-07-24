@@ -71,7 +71,7 @@ const ProfileUpdate=()=>{
     return(
         <div className={styles.profileUpdate}>
             <h1 className={styles.profile_header}>Update Profile</h1>
-                {profilePicture && <img className={styles.profile_picture} src={imageUrl} alt="Profile"/>}<br/>
+                {profilePicture && <img className={styles.profile_picture} src={profilePicture} alt="Profile"/>}<br/>
                 <input className={styles.upload_button} type='file' onChange={handleFileChange}/><br/>
                 <input className={styles.profile_url} type='url' value={profilePicture} onChange={handleUrlChange}/><br/>
                 <button className={styles.upload_button} onClick={handleUpload}>Upload Profile Picture</button>
