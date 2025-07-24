@@ -24,6 +24,7 @@ const ProfileUpdate=()=>{
     })
     .catch((error)=>console.error(error));
    },[token,profilePicture]);
+   
 
     const handleFileChange = (event)=>{
         setSelectedFile(event.target.files[0]); 
