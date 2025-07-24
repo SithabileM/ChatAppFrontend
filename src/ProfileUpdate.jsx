@@ -1,5 +1,6 @@
 import React, {useState,useEffect} from 'react'
 import styles from './ProfileUpdate.module.css'
+import { supabase } from './supabaseClient';
 
 const ProfileUpdate=()=>{
    const [selectedFile,setSelectedFile] = useState(null);
@@ -28,10 +29,18 @@ const ProfileUpdate=()=>{
         setSelectedFile(event.target.files[0]); 
     };
 
-    const handleUpload =()=>{
+    const handleUpload =async()=>{
         const formData=new FormData();
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
         if (selectedFile){
             formData.append('profile_picture',selectedFile)
+            let {data,error} = await supabase.storage.from('user-images').upload(filePath,selectedFile)
+            const {data: url} = await supabase.storage.from('user-images').getPublicUrl(filePath);
+            setImageUrl(url.publicUrl);
+            alert('file uploaded successfully.');
         }
         else{
             formData.append('profile_picture',profilePicture)
@@ -48,6 +57,7 @@ const ProfileUpdate=()=>{
         })
         .then((response)=> response.json())
         .then((data)=>{
+
             setProfilePicture(data.profile_picture);
             localStorage.setItem('profile',data.profile_picture);
         })
