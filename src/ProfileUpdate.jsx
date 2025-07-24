@@ -1,6 +1,6 @@
-import React, {useState,useEffect} from 'react'
-import styles from './ProfileUpdate.module.css'
-import { supabase } from './supabaseClient';
+import React, {useState,useEffect} from 'react';
+import styles from './ProfileUpdate.module.css';
+import  supabase  from './supabaseClient';
 
 const ProfileUpdate=()=>{
    const [selectedFile,setSelectedFile] = useState(null);
