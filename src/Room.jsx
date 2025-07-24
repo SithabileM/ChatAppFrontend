@@ -67,7 +67,7 @@ return(
             {error&& <p>{error.message}</p>}
 
             <div className={styles.recipient_container}>
-            {image&&<img className={styles.profile_picture} src={image} alt='user profile'></img>}
+            {image&&<img className={styles.profile_picture} src={image.slice(21,-1)} alt='user profile'></img>}
             <h2 className={styles.recipient_username}>{recipient}</h2>
             </div>
 
