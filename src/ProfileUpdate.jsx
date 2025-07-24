@@ -20,7 +20,7 @@ const ProfileUpdate=()=>{
     .then((response)=> response.json())
     .then((data)=>{
         setProfilePicture(data.profile_picture);
-        setImageUrl(baseUrl+data.profile_picture);
+        setImageUrl(data.profile_picture);
     })
     .catch((error)=>console.error(error));
    },[token,profilePicture]);
@@ -39,11 +39,11 @@ const ProfileUpdate=()=>{
             formData.append('profile_picture',selectedFile)
             let {data,error} = await supabase.storage.from('user-images').upload(filePath,selectedFile)
             const {data: url} = await supabase.storage.from('user-images').getPublicUrl(filePath);
-            setImageUrl(url.publicUrl);
+            setImageUrl(url.data.publicUrl);
             alert('file uploaded successfully.');
         }
         else{
-            formData.append('profile_picture',profilePicture)
+            formData.append('profile_picture', profilePicture)
         }
 
 
@@ -63,6 +63,8 @@ const ProfileUpdate=()=>{
         })
         .catch((error)=>console.error(error))
         console.log(selectedFile)
+        const file_url=imageUrl
+        return file_url
 
     };
 
