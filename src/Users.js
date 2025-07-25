@@ -30,6 +30,7 @@ const Users= ()=>{
         data => {
             const users=data.filter((d)=>{return d.username.toUpperCase().includes(term.toUpperCase())});
             setAppUsers(users);
+            console.log(AppUsers);
         }
     )
         setButtonCaption("Show my connections");
@@ -124,9 +125,9 @@ return(
     {AppUsers&&AppUsers.map((AppUser,index)=>(
         <div className={styles.profile_container} key={AppUser.id}>
             <div>
-                {imageUrls[index]&&<img className={styles.profile} src={`${AppUser.profile_picture}`} alt={`${AppUser.username}'s profile`} />}
+                {imageUrls[index]&&<img className={styles.profile} src={AppUser.profile_picture} alt={`${AppUser.username}'s profile`} />}
             </div>
-                {imageUrls[index]&&<Link data-testid='username' className={styles.username} to={"/Users/"+ AppUser.id} state={{image:`${imageUrls[index].profile_picture}`,id: AppUser.id,recipient: AppUser.username,}}>{AppUser.username}</Link>}
+                {imageUrls[index]&&<Link data-testid='username' className={styles.username} to={"/Users/"+ AppUser.id} state={{image: AppUser.profile_picture,id: AppUser.id,recipient: AppUser.username,}}>{AppUser.username}</Link>}
         </div>
     ))}
     {AppUsers&&AppUsers.length===0 && <p>No results found</p>}
