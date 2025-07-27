@@ -2,9 +2,9 @@ import React, {useState,useEffect} from 'react';
 import styles from './ProfileUpdate.module.css';
 import  supabase  from './supabaseClient';
 
+
 const ProfileUpdate=()=>{
    const [selectedFile,setSelectedFile] = useState(null);
-   const [profilePicture,setProfilePicture] = useState('');
    const token=localStorage.getItem('token');
    const [imageUrl,setImageUrl]=useState("");
    const baseUrl=process.env.REACT_APP_API_BASE_URL
@@ -19,12 +19,10 @@ const ProfileUpdate=()=>{
     })
     .then((response)=> response.json())
     .then((data)=>{
-        setProfilePicture(data.profile_picture);
         setImageUrl(data.profile_picture);
-        console.log(data.profile_picture);
     })
     .catch((error)=>console.error(error));
-   },[token,profilePicture]);
+   },[baseUrl,token]);
 
 
     const handleFileChange = (event)=>{
@@ -32,18 +30,16 @@ const ProfileUpdate=()=>{
     };
 
     const handleUpload =async()=>{
-        const fileExt = selectedFile.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
+        if (!selectedFile){return;};
 
-        if (selectedFile){
-            let {data,error} = await supabase.storage.from('user-images').upload(filePath,selectedFile)
-            const {data: url} = await supabase.storage.from('user-images').getPublicUrl(filePath);
-            setImageUrl(url.publicUrl);
-            alert('file uploaded successfully.');
+        const filePath=`user-images/${Date.now()}_${selectedFile.name}`;
+        const {error}=await supabase.storage.from('user-images').upload(filePath,selectedFile);
+        if (error){
+            console.error('Upload error:',error);
+            return
         }
-        
-
+        const publicUrl=supabase.storage.from('user-images').getPublicUrl(filePath).data;
+        setImageUrl(publicUrl)
 
         //upload file
         fetch(`${baseUrl}/profile_picture`,{
@@ -51,30 +47,17 @@ const ProfileUpdate=()=>{
             headers:{
                 'Authorization': `Token ${token}`,
             },
+            body: JSON.stringify({profile_picture: publicUrl})
         })
-        .then((response)=> response.json())
-        .then((data)=>{
+        .catch((error)=>console.error(error));
 
-            setProfilePicture(data.profile_picture);
-            localStorage.setItem('profile',data.profile_picture);
-        })
-        .catch((error)=>console.error(error))
-        console.log(selectedFile)
-        const file_url=imageUrl
-        return JSON.stringify(file_url)
-
-    };
-
-    const handleUrlChange =(event)=> {
-        setProfilePicture(event.target.value);
     };
 
     return(
         <div className={styles.profileUpdate}>
             <h1 className={styles.profile_header}>Update Profile</h1>
-                {profilePicture && <img className={styles.profile_picture} src={imageUrl} alt="Profile"/>}<br/>
+                {imageUrl && <img className={styles.profile_picture} src={imageUrl} alt="Profile"/>}<br/>
                 <input className={styles.upload_button} type='file' onChange={handleFileChange}/><br/>
-                <input className={styles.profile_url} type='url' value={profilePicture} onChange={handleUrlChange}/><br/>
                 <button className={styles.upload_button} onClick={handleUpload}>Upload Profile Picture</button>
         </div>
     )
