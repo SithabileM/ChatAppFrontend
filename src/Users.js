@@ -9,7 +9,7 @@ const Users= ()=>{
     const [allUsersShown,setAllUsersShown]=useState(true);
     const [buttonCaption,setButtonCaption] = useState("Show all users");
     const [searchTerm, setSearchTerm] = useState('');
-    const [imageUrls,setImageUrls]=useState([]);
+    //const [imageUrls,setImageUrls]=useState([]);
     const token =localStorage.getItem('token');
     const baseUrl=process.env.REACT_APP_API_BASE_URL;
     const navigate=useNavigate();
@@ -69,24 +69,24 @@ const Users= ()=>{
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[searchTerm])
 
-    useEffect(()=>{
-         const fetchImages=async()=>{
-            const promises= AppUsers.map((AppUser)=>{
-                return fetch(`${baseUrl}/getProfilePicture/${AppUser.id}`,{
-            method: 'GET',
-            headers: {'Content-Type':'multipart/form-data'}
-        }).then(res => res.json())
-            });
-            const results= await Promise.all(promises);
-        
-            setImageUrls(results);
-            
-            
-        }
-        fetchImages();
+   // useEffect(()=>{
+   //      const fetchImages=async()=>{
+    //        const promises= AppUsers.map((AppUser)=>{
+    //            return fetch(`${baseUrl}/getProfilePicture/${AppUser.id}`,{
+    //        method: 'GET',
+    //        headers: {'Content-Type':'multipart/form-data'}
+     //   }).then(res => res.json())
+     //       });
+      //      const results= await Promise.all(promises);
+      //  
+       //     setImageUrls(results);
+       //     
+      //      
+      //  }
+      //  fetchImages();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[AppUsers])
+   // },[AppUsers])
 
     const handleLogout=()=>{
         fetch(`${baseUrl}/logout`,{
@@ -125,9 +125,9 @@ return(
     {AppUsers&&AppUsers.map((AppUser,index)=>(
         <div className={styles.profile_container} key={AppUser.id}>
             <div>
-                {imageUrls[index]&&<img className={styles.profile} src={AppUser.profile_picture} alt={`${AppUser.username}'s profile`} />}
+                {AppUser.profile_picture&&<img className={styles.profile} src={AppUser.profile_picture} alt={`${AppUser.username}'s profile`} />}
             </div>
-                {imageUrls[index]&&<Link data-testid='username' className={styles.username} to={"/Users/"+ AppUser.id} state={{image: AppUser.profile_picture,id: AppUser.id,recipient: AppUser.username,}}>{AppUser.username}</Link>}
+                {AppUser.profile_picture&&<Link data-testid='username' className={styles.username} to={"/Users/"+ AppUser.id} state={{image: AppUser.profile_picture,id: AppUser.id,recipient: AppUser.username,}}>{AppUser.username}</Link>}
         </div>
     ))}
     {AppUsers&&AppUsers.length===0 && <p>No results found</p>}
