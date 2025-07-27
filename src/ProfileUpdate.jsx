@@ -21,6 +21,7 @@ const ProfileUpdate=()=>{
     .then((data)=>{
         setProfilePicture(data.profile_picture);
         setImageUrl(data.profile_picture);
+        console.log(data.profile_picture);
     })
     .catch((error)=>console.error(error));
    },[token,profilePicture]);
@@ -38,7 +39,7 @@ const ProfileUpdate=()=>{
         if (selectedFile){
             let {data,error} = await supabase.storage.from('user-images').upload(filePath,selectedFile)
             const {data: url} = await supabase.storage.from('user-images').getPublicUrl(filePath);
-            setImageUrl(url.data.publicUrl);
+            setImageUrl(url.publicUrl);
             alert('file uploaded successfully.');
         }
         
