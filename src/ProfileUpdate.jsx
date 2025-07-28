@@ -54,7 +54,7 @@ const ProfileUpdate=()=>{
             headers:{
                 'Authorization': `Token ${token}`,
             },
-            body: JSON.stringify({profile_picture: publicUrl})
+            body: JSON.stringify({profile_picture: imageUrl})
         })
         .catch((error)=>console.error(error));
 
