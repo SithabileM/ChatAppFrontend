@@ -22,7 +22,7 @@ const ProfileUpdate=()=>{
         setImageUrl(data.profile_picture);
     })
     .catch((error)=>console.error(error));
-   },[baseUrl,token]);
+   },[]);
 
 
     const handleFileChange = (event)=>{

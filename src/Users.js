@@ -125,7 +125,7 @@ return(
     {AppUsers&&AppUsers.map((AppUser,index)=>(
         <div className={styles.profile_container} key={AppUser.id}>
             <div>
-                {AppUser&&<img className={styles.profile} src={AppUser.profile_picture} alt={`${AppUser.username}'s profile`} />}
+                {AppUser&&<img className={styles.profile} src={AppUser.profile.profile_picture} alt={`${AppUser.username}'s profile`} />}
             </div>
                 {AppUser&&<Link data-testid='username' className={styles.username} to={"/Users/"+ AppUser.id} state={{image: AppUser.profile_picture,id: AppUser.id,recipient: AppUser.username,}}>{AppUser.username}</Link>}
         </div>
