@@ -38,8 +38,15 @@ const ProfileUpdate=()=>{
             console.error('Upload error:',error);
             return
         }
-        const publicUrl=supabase.storage.from('user-images').getPublicUrl(filePath).data;
-        setImageUrl(publicUrl)
+        const { data } = supabase
+        .storage
+        .from('user-images')
+        .getPublicUrl(filePath);
+
+    const publicUrl = data.publicUrl;
+
+    setImageUrl(publicUrl);
+    console.log(publicUrl);
 
         //upload file
         fetch(`${baseUrl}/profile_picture`,{
