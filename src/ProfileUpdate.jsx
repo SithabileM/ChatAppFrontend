@@ -32,7 +32,7 @@ const ProfileUpdate=()=>{
     const handleUpload =async()=>{
         if (!selectedFile){return;};
 
-        const filePath=`user-images/${Date.now()}_${selectedFile.name}`;
+        const filePath=`${Date.now()}_${selectedFile.name}`;
         const {error}=await supabase.storage.from('user-images').upload(filePath,selectedFile);
         if (error){
             console.error('Upload error:',error);
