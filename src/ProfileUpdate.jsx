@@ -58,6 +58,7 @@ const ProfileUpdate=()=>{
             method: 'PUT',
             headers:{
                 'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({profile_picture: imageUrl})
         })
