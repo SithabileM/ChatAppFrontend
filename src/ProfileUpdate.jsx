@@ -48,6 +48,11 @@ const ProfileUpdate=()=>{
     setImageUrl(publicUrl);
     console.log(publicUrl);
 
+        
+
+    };
+
+    useEffect(()=>{
         //upload file
         fetch(`${baseUrl}/profile_picture`,{
             method: 'PUT',
@@ -58,7 +63,7 @@ const ProfileUpdate=()=>{
         })
         .catch((error)=>console.error(error));
 
-    };
+    },[imageUrl])
 
     return(
         <div className={styles.profileUpdate}>
