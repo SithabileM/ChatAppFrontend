@@ -33,14 +33,14 @@ const ProfileUpdate=()=>{
         if (!selectedFile){return;};
 
         const filePath=`${Date.now()}_${selectedFile.name}`;
-        const {error}=await supabase.storage.from('profile').upload(filePath,selectedFile);
+        const {error}=await supabase.storage.from('user-images').upload(filePath,selectedFile);
         if (error){
             console.error('Upload error:',error);
             return
         }
         const { data } = supabase
         .storage
-        .from('profile')
+        .from('user-images')
         .getPublicUrl(filePath);
 
     const publicUrl = data.publicUrl;
