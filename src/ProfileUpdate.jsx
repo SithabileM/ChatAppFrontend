@@ -64,7 +64,7 @@ const ProfileUpdate=()=>{
         })
         .catch((error)=>console.error(error));
 
-    },[baseUrl, imageUrl, token])
+    },[baseUrl])
 
     return(
         <div className={styles.profileUpdate}>
